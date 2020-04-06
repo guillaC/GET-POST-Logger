@@ -1,5 +1,5 @@
 <?php
-if (count($_GET)>0 || count($_POST)>0){
+if (count($_GET)>0 || count($_POST)>0 || count($_COOKIE)>0){
     $newEntry = "
     <div class=\"card border-secondary mb-3\">
     <div class=\"card-header\">" . $_SERVER['REMOTE_ADDR'] . "</div>
@@ -8,20 +8,26 @@ if (count($_GET)>0 || count($_POST)>0){
     
         $newEntry.="<h4 class=\"card-title\">GET</h4><p class=\"card-text\">";
         foreach ($_GET as $key => $value) {
-            $newEntry.="<div class=\"container\"><div class=\"row\"><div class=\"col\"><kbd>{$key}</kbd></div><div class=\"col\"><textarea class=\"form-control\">{$value}</textarea></div></div></div><br>";
+            $newEntry.="<div class=\"container\"><div class=\"row\"><div class=\"col\"><kbd>". htmlspecialchars($key) ."</kbd></div><div class=\"col\"><textarea class=\"form-control\">". htmlspecialchars($value) ."</textarea></div></div></div><br>";
         }
     }
     if (count($_POST)>0) {
     
         $newEntry.="<h4 class=\"card-title\">POST</h4><p class=\"card-text\">";
         foreach ($_POST as $key => $value) {
-            $newEntry.="<div class=\"container\"><div class=\"row\"><div class=\"col\"><kbd>{$key}</kbd></div><div class=\"col\"><textarea class=\"form-control\">{$value}</textarea></div></div></div><br>";
+            $newEntry.="<div class=\"container\"><div class=\"row\"><div class=\"col\"><kbd>". htmlspecialchars($key) ."</kbd></div><div class=\"col\"><textarea class=\"form-control\">". htmlspecialchars($value) ."</textarea></div></div></div><br>";
+        }
+    }
+    if (count($_COOKIE)>0) {
+    
+        $newEntry.="<h4 class=\"card-title\">COOKIE</h4><p class=\"card-text\">";
+        foreach ($_COOKIE as $key => $value) {
+            $newEntry.="<div class=\"container\"><div class=\"row\"><div class=\"col\"><kbd>". htmlspecialchars($key) ."</kbd></div><div class=\"col\"><textarea class=\"form-control\">". htmlspecialchars($value) ."</textarea></div></div></div><br>";
         }
     }
     $newEntry.="</p> <footer class=\"blockquote-footer\">".date('Y-m-d H:i:s')."</footer>";
     $newEntry.="</div></div>";
-    $content = file_get_contents (__FILE__);
-    file_put_contents (__FILE__, $content . $newEntry);
+    file_put_contents (__FILE__, $newEntry, FILE_APPEND);
 }
 ?>
 <html>
